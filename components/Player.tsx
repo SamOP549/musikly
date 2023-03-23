@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import useSound from "use-sound";
-import audio1 from '../public/music/on-n-on.mp3'
 
 const Player = ({ display, setDisplay }: any) => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -14,7 +13,8 @@ const Player = ({ display, setDisplay }: any) => {
             sec: 0,
         }
     )
-    const [play, { pause, duration, sound }] = useSound(audio1);
+    const audio = "https://audioplayer.madza.dev/Madza-Late_Night_Drive.mp3"
+    const [play, { pause, duration, sound }] = useSound(audio);
     const [seconds, setSeconds] = useState();
     const [songs, setSongs] = useState([
         {
@@ -32,13 +32,15 @@ const Player = ({ display, setDisplay }: any) => {
     ]);
 
     useEffect(() => {
-        const sec = duration / 1000;
-        const min = Math.floor(sec / 60);
-        const secRemain = Math.floor(sec % 60);
-        settotTime({
-            min: min,
-            sec: secRemain
-        })
+        if (duration) {
+            const sec = duration / 1000;
+            const min = Math.floor(sec / 60);
+            const secRemain = Math.floor(sec % 60);
+            settotTime({
+                min: min,
+                sec: secRemain
+            })
+        }
     }, [sound]);
     useEffect(() => {
         const interval = setInterval(() => {
@@ -133,8 +135,7 @@ const Player = ({ display, setDisplay }: any) => {
                             <input
                                 type="range"
                                 min="0"
-                                max={duration / 1000}
-                                default="0"
+                                max={`${duration && duration / 1000}`}
                                 value={seconds}
                                 className="timeline w-full bg-[#27ae60]"
                                 onChange={(e) => {
